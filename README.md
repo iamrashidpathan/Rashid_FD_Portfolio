@@ -1,10 +1,10 @@
-# Rashid Reyaz Khan — Portfolio (Frontend / Mujin-tailored)
+# Rashid Reyaz Khan — Portfolio (Frontend)
 
 **Live site:** [iamrashidpathan.github.io/Rashid_FD_Portfolio](https://iamrashidpathan.github.io/Rashid_FD_Portfolio/)
 
-A single-file, zero-build portfolio aimed at real-time-UI frontend roles (built with Mujin's Senior Frontend Engineer JD in mind). Theme: **Operator Console / MujinController HUD** — a dark robotics-console look with an animated *digital-twin* hero (isometric grid + a pick-and-place motion arc), telemetry readouts, and section headers styled as console modules.
+A single-file, zero-build portfolio aimed at real-time-UI frontend roles. Theme: **Operator Console / HUD** — a dark robotics-console look with an animated *digital-twin* hero (isometric grid + a pick-and-place motion arc), telemetry readouts, and section headers styled as console modules.
 
-Why this theme: Mujin's minimum requirements call out **CSS/SVG visual effects and animation** and **web-performance work**. The hero is a hand-written `<canvas>` animation (dpr-capped, paused when the tab is hidden, with a static fallback) — so the page itself demonstrates the skill, not just claims it.
+Why this theme: The role calls out **CSS/SVG visual effects and animation** and **web-performance work**. The hero is a hand-written `<canvas>` animation (dpr-capped, paused when the tab is hidden, with a static fallback) — so the page itself demonstrates the skill, not just claims it.
 
 Everything is in `index.html` — all CSS/JS inline, **no external runtime dependency** (only Google Fonts via `<link>`), vanilla JS only.
 
@@ -27,7 +27,7 @@ After deploy, update `og:url` / `og:image` / `twitter:image` in `<head>` to your
 - **Config constants** (top of the `<script>` IIFE):
   - `CALENDLY_URL` — empty = email-only booking; set your scheduler link and an **"Open scheduler"** button appears (never a dead link).
   - `EMAIL` — used by booking, command palette, and contact.
-- **Assistant knowledge:** the `KB` array — `{k:[keywords], a:"answer"}`. Runs 100% client-side (no backend, no key), so it works on static hosting. It has a Mujin-fit answer built in.
+- **Assistant knowledge:** the `KB` array — `{k:[keywords], a:"answer"}`. Runs 100% client-side (no backend, no key), so it works on static hosting. It runs entirely client-side.
 
 ### Upgrade the assistant to a real LLM (optional)
 Keep the key server-side. Swap `answer()` for a `fetch()` to your own serverless proxy:
@@ -54,4 +54,4 @@ rsvg-convert -w 1200 -h 630 og-image.svg -o og-image.png
 ```
 
 ## Honesty note
-All content comes from the provided (Mujin-tailored) resume — no invented employers, titles, or metrics. Payload/work links are marked as placeholders (`aria-disabled`) since no public demo URLs were supplied; wire them up when ready. Note: this resume lists Oracle IRT2 as reaching 50,000+ users and EXL Vantage as healthcare/medical — the earlier general resume phrased these differently, so double-check which numbers you want public before sending.
+All content comes from the provided resume — no invented employers, titles, or metrics. Payload/work links are marked as placeholders (`aria-disabled`) since no public demo URLs were supplied; wire them up when ready. Note: this resume lists Oracle IRT2 as reaching 50,000+ users and EXL Vantage as healthcare/medical — the earlier general resume phrased these differently, so double-check which numbers you want public before sending.
