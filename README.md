@@ -1,5 +1,7 @@
 # Rashid Reyaz Khan — Portfolio (Frontend / Mujin-tailored)
 
+**Live site:** [iamrashidpathan.github.io/Rashid_FD_Portfolio](https://iamrashidpathan.github.io/Rashid_FD_Portfolio/)
+
 A single-file, zero-build portfolio aimed at real-time-UI frontend roles (built with Mujin's Senior Frontend Engineer JD in mind). Theme: **Operator Console / MujinController HUD** — a dark robotics-console look with an animated *digital-twin* hero (isometric grid + a pick-and-place motion arc), telemetry readouts, and section headers styled as console modules.
 
 Why this theme: Mujin's minimum requirements call out **CSS/SVG visual effects and animation** and **web-performance work**. The hero is a hand-written `<canvas>` animation (dpr-capped, paused when the tab is hidden, with a static fallback) — so the page itself demonstrates the skill, not just claims it.
