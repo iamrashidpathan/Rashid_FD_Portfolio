@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rashid Reyaz Khan — Senior Frontend Engineer</title>
+<meta name="description" content="Rashid Reyaz Khan — Senior Frontend Engineer. React, TypeScript, CSS/SVG animation, and web-performance work on real-time enterprise interfaces. Hyderabad, relocating to Tokyo." />
+
+<!-- Open Graph / Twitter — replace placeholders before deploy -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Rashid Reyaz Khan — Senior Frontend Engineer" />
+<meta property="og:description" content="Real-time UI · React/TypeScript · CSS &amp; SVG animation · web-perf. Relocating to Tokyo." />
+<meta property="og:url" content="https://REPLACE-WITH-YOUR-DOMAIN.example" />
+<meta property="og:image" content="https://REPLACE-WITH-YOUR-DOMAIN.example/og-image.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Rashid Reyaz Khan — Senior Frontend Engineer" />
+<meta name="twitter:description" content="Real-time UI · React/TypeScript · CSS &amp; SVG animation · web-perf. Relocating to Tokyo." />
+<meta name="twitter:image" content="https://REPLACE-WITH-YOUR-DOMAIN.example/og-image.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+<style>
+:root{
+  --bg:#0B0F14;
+  --panel:#121821;
+  --panel-2:#161E29;
+  --line:rgba(230,236,242,.10);
+  --line-2:rgba(230,236,242,.18);
+  --fg:#E6ECF2;
+  --fg-soft:#AAB6C4;
+  --muted:#6B7A8D;
+  --signal:#38E1D6;     /* perception / vision */
+  --signal-dim:#1F8F88;
+  --motion:#FFB347;     /* actuation / motion */
+  --ok:#7CE38B;
+
+  --display:"Space Grotesk",system-ui,sans-serif;
+  --body:"Inter",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+
+  --maxw:1200px;
+  --gut:clamp(20px,4.5vw,64px);
+  --hud:44px;
+
+  --s--1:clamp(.76rem,.72rem + .2vw,.84rem);
+  --s-0:clamp(.94rem,.9rem + .22vw,1.02rem);
+  --s-1:clamp(1.12rem,1rem + .55vw,1.35rem);
+  --s-2:clamp(1.5rem,1.2rem + 1.4vw,2.1rem);
+  --s-3:clamp(2.1rem,1.5rem + 3vw,3.4rem);
+  --s-4:clamp(2.7rem,1.7rem + 5.4vw,5.6rem);
+
+  --ease:cubic-bezier(.2,.7,.3,1);
+}
+[data-theme="light"]{
+  --bg:#EEF2F6;--panel:#FFFFFF;--panel-2:#F4F7FA;
+  --line:rgba(11,15,20,.10);--line-2:rgba(11,15,20,.18);
+  --fg:#0B0F14;--fg-soft:#33414F;--muted:#5C6B7A;
+  --signal-dim:#0FA097;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;background:var(--bg);color:var(--fg);
+  font-family:var(--body);font-size:var(--s-0);line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  transition:background .5s var(--ease),color .5s var(--ease);
+}
+a{color:inherit;text-decoration:none}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.06;font-weight:600;letter-spacing:-.01em}
+img{max-width:100%;display:block}
+::selection{background:var(--signal);color:#04110F}
+
+.skip{position:absolute;left:-9999px;top:0;background:var(--signal);color:#04110F;padding:10px 16px;z-index:200;font-family:var(--mono)}
+.skip:focus{left:12px;top:12px}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:2px}
+
+/* ---------- boot / calibration ---------- */
+#boot{position:fixed;inset:0;z-index:300;background:var(--bg);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:16px;transition:opacity .6s var(--ease),visibility .6s var(--ease)}
+#boot.done{opacity:0;visibility:hidden}
+.boot-grid{width:min(260px,60vw);height:120px;position:relative;border:1px solid var(--line);overflow:hidden}
+.boot-grid svg{width:100%;height:100%}
+.boot-txt{font-family:var(--mono);font-size:var(--s--1);color:var(--muted);letter-spacing:.16em;text-transform:uppercase}
+.boot-txt b{color:var(--signal);font-weight:500}
+.boot-pct{font-family:var(--mono);color:var(--motion);font-size:var(--s--1)}
+
+/* ---------- HUD side rail ---------- */
+.rail{position:fixed;left:0;top:0;width:var(--hud);height:100vh;z-index:40;background:var(--panel);
+  border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;
+  justify-content:space-between;padding:14px 0}
+.rail .stat{font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;color:var(--muted);
+  writing-mode:vertical-rl;text-orientation:mixed}
+.rail .stat b{color:var(--signal)}
+.rail .node{width:8px;height:8px;border:1px solid var(--signal);border-radius:50%}
+.rail .node.live{background:var(--signal);box-shadow:0 0 10px var(--signal);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+.progress{position:fixed;left:0;top:0;width:var(--hud);z-index:41;pointer-events:none}
+.progress::after{content:"";position:absolute;right:-1px;top:0;width:2px;height:var(--p,0%);
+  background:linear-gradient(var(--signal),var(--motion))}
+
+.wrap{margin-left:var(--hud)}
+.container{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gut)}
+
+/* ---------- header ---------- */
+header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 82%,transparent);
+  backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}
+header.scrolled{border-color:var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+.brand{font-family:var(--display);font-size:var(--s-1);font-weight:600;display:flex;align-items:center;gap:10px}
+.brand .chip{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;color:var(--signal);
+  border:1px solid var(--signal-dim);padding:3px 7px;border-radius:3px;text-transform:uppercase}
+.nav-links{display:flex;gap:clamp(12px,1.8vw,26px);align-items:center}
+.nav-links a{font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;color:var(--fg-soft);text-transform:uppercase;position:relative}
+.nav-links a .n{color:var(--muted);margin-right:.4ch}
+.nav-links a:hover{color:var(--signal)}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--signal);transition:width .3s var(--ease)}
+.nav-links a:hover::after{width:100%}
+.nav-tools{display:flex;gap:8px;align-items:center}
+.iconbtn{width:37px;height:37px;border:1px solid var(--line);background:transparent;color:var(--fg);
+  border-radius:4px;cursor:pointer;display:grid;place-items:center;transition:.25s var(--ease)}
+.iconbtn:hover{border-color:var(--signal);color:var(--signal)}
+.iconbtn svg{width:16px;height:16px}
+.kbd{font-family:var(--mono);font-size:.66rem;border:1px solid var(--line);border-radius:4px;padding:3px 6px;color:var(--muted)}
+.menu-toggle{display:none}
+
+/* ---------- sections ---------- */
+section{padding-block:clamp(64px,10vh,128px);position:relative}
+.modlabel{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:var(--s--1);
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:34px}
+.modlabel .m{color:var(--signal)}
+.modlabel .sep{color:var(--line-2)}
+.modlabel .t{color:var(--fg)}
+.modlabel .ln{flex:1;height:1px;background:var(--line)}
+.modlabel .rt{color:var(--motion);font-size:.9em}
+
+/* ---------- hero ---------- */
+#hero{min-height:calc(100vh - 66px);display:flex;align-items:center;padding-block:40px;position:relative}
+.twin{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.9}
+.twin canvas,.twin svg{width:100%;height:100%}
+.hero-inner{position:relative;z-index:2;max-width:820px}
+.hero-tel{display:flex;flex-wrap:wrap;gap:8px 22px;font-family:var(--mono);font-size:var(--s--1);
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:24px}
+.hero-tel .live{color:var(--signal);display:inline-flex;align-items:center;gap:7px}
+.hero-tel .live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--signal);box-shadow:0 0 8px var(--signal);animation:blink 2s infinite}
+.hero-tel .to{color:var(--motion)}
+h1.title{font-size:var(--s-4);font-weight:700;letter-spacing:-.02em}
+h1.title .sub{display:block;font-family:var(--mono);font-size:.22em;font-weight:500;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--signal);margin-bottom:1.1em}
+h1.title em{font-style:normal;color:var(--signal)}
+h1.title u{text-decoration:none;color:var(--motion)}
+.tag{font-size:var(--s-1);color:var(--fg-soft);max-width:52ch;margin-top:26px;font-weight:300}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.btn{font-family:var(--mono);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;
+  padding:14px 24px;border:1px solid var(--line-2);cursor:pointer;background:transparent;color:var(--fg);
+  transition:.28s var(--ease);display:inline-flex;align-items:center;gap:10px;border-radius:4px}
+.btn:hover{border-color:var(--signal);color:var(--signal)}
+.btn.primary{background:var(--signal);border-color:var(--signal);color:#04110F;font-weight:500}
+.btn.primary:hover{background:#5FEBE1;color:#04110F}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}}
+
+/* ---------- about ---------- */
+.about-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(28px,4vw,64px);align-items:start}
+.lead{font-family:var(--display);font-size:var(--s-2);line-height:1.35;font-weight:500}
+.lead em{color:var(--signal);font-style:normal}
+.about-body{color:var(--fg-soft);margin-top:22px;max-width:58ch}
+.readout{background:var(--panel);border:1px solid var(--line)}
+.readout .rh{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);padding:12px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.readout .rh b{color:var(--signal)}
+.readout dl{margin:0;padding:6px 16px 14px}
+.readout .row{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid var(--line);font-size:var(--s--1)}
+.readout .row:last-child{border-bottom:none}
+.readout dt{font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.readout dd{margin:0;text-align:right;color:var(--fg);font-family:var(--mono)}
+.readout dd.hi{color:var(--signal)}
+.readout dd.mo{color:var(--motion)}
+
+/* ---------- experience ---------- */
+.timeline{border-top:1px solid var(--line)}
+.job{display:grid;grid-template-columns:200px 1fr;gap:clamp(16px,3vw,44px);
+  padding:32px 0;border-bottom:1px solid var(--line);transition:background .3s var(--ease)}
+.job:hover{background:var(--panel)}
+.job .meta{padding-top:5px}
+.job .when{font-family:var(--mono);font-size:var(--s--1);color:var(--muted);letter-spacing:.03em}
+.job .when .cur{color:var(--motion)}
+.job .co{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--signal);margin-top:10px}
+.job h3{font-size:var(--s-1);margin:8px 0 3px;font-weight:600}
+.job .loc{font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+.job ul{margin:6px 0 0;padding:0;list-style:none;display:grid;gap:11px}
+.job li{position:relative;padding-left:22px;color:var(--fg-soft);max-width:72ch;font-size:var(--s-0)}
+.job li::before{content:"▸";position:absolute;left:0;top:0;color:var(--signal);font-size:.8em;top:.15em}
+.job li b{color:var(--fg);font-weight:600}
+.job li .metric{color:var(--motion);font-family:var(--mono);font-size:.92em}
+
+/* ---------- skills ---------- */
+.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line)}
+.skill{background:var(--bg);padding:26px clamp(18px,2vw,30px);transition:background .3s var(--ease)}
+.skill:hover{background:var(--panel)}
+.skill .sh{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);display:flex;justify-content:space-between;margin-bottom:16px}
+.skill .sh b{color:var(--signal)}
+.skill h3{font-size:var(--s-1);margin-bottom:16px;font-weight:600}
+.tags{display:flex;flex-wrap:wrap;gap:7px}
+.tag{font-family:var(--mono);font-size:.72rem;color:var(--fg-soft);border:1px solid var(--line-2);
+  padding:5px 10px;border-radius:3px;transition:.2s}
+.tag:hover{border-color:var(--signal);color:var(--signal)}
+.tag.req{border-color:var(--signal-dim);color:var(--signal)}
+
+/* ---------- work ---------- */
+.note{font-family:var(--mono);font-size:var(--s--1);color:var(--muted);border:1px dashed var(--line-2);
+  padding:13px 16px;margin-bottom:26px;letter-spacing:.02em}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:clamp(12px,1.6vw,18px)}
+.card{background:var(--panel);border:1px solid var(--line);padding:26px;display:flex;flex-direction:column;
+  gap:13px;transition:.3s var(--ease);position:relative;overflow:hidden;border-radius:4px}
+.card::before{content:"";position:absolute;left:0;top:0;width:100%;height:2px;
+  background:linear-gradient(90deg,var(--signal),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.card:hover{transform:translateY(-4px);border-color:var(--line-2)}
+.card:hover::before{transform:scaleX(1)}
+.card .cn{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--signal)}
+.card h3{font-size:var(--s-1);font-weight:600}
+.card p{color:var(--fg-soft);font-size:var(--s--1);flex:1}
+.card .links{display:flex;gap:16px;font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em}
+.card .links a{color:var(--signal)}
+.card .links a[aria-disabled="true"]{color:var(--muted);pointer-events:none}
+
+/* ---------- booking ---------- */
+.book{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px);align-items:start}
+.book .lead2{font-family:var(--display);font-size:var(--s-2);line-height:1.32;font-weight:500}
+.book p{color:var(--fg-soft);margin:16px 0}
+.field{margin-bottom:15px}
+.field label{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.field input,.field textarea,.field select{width:100%;background:var(--panel);border:1px solid var(--line-2);
+  color:var(--fg);font-family:var(--body);font-size:var(--s-0);padding:11px 13px;border-radius:4px}
+.field textarea{resize:vertical;min-height:88px}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--signal);outline:none}
+
+/* ---------- contact ---------- */
+#contact .big{font-family:var(--display);font-size:var(--s-3);line-height:1.1;max-width:18ch;font-weight:600}
+#contact .big a{color:var(--signal)}
+#contact .big a:hover{text-decoration:underline;text-underline-offset:6px}
+.contact-row{display:flex;flex-wrap:wrap;gap:12px 28px;margin-top:32px;font-family:var(--mono);
+  font-size:var(--s--1);text-transform:uppercase;letter-spacing:.06em}
+.contact-row a{color:var(--fg-soft);display:inline-flex;align-items:center;gap:8px;transition:color .25s}
+.contact-row a:hover{color:var(--signal)}
+footer{border-top:1px solid var(--line);padding:26px 0}
+.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-family:var(--mono);
+  font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* ---------- command palette ---------- */
+.cmdk{position:fixed;inset:0;z-index:150;display:none;align-items:flex-start;justify-content:center;
+  padding-top:14vh;background:rgba(4,8,12,.6);backdrop-filter:blur(4px)}
+.cmdk.open{display:flex}
+.cmdk-box{width:min(560px,92vw);background:var(--panel);border:1px solid var(--line-2);border-radius:6px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.5)}
+.cmdk-box input{width:100%;border:none;background:transparent;color:var(--fg);font-family:var(--body);font-size:var(--s-1);padding:19px 22px;border-bottom:1px solid var(--line)}
+.cmdk-box input:focus{outline:none}
+.cmdk-list{max-height:320px;overflow:auto;padding:8px}
+.cmdk-item{display:flex;align-items:center;gap:14px;padding:12px 15px;cursor:pointer;border-radius:4px;font-size:var(--s-0)}
+.cmdk-item .ci{font-family:var(--mono);color:var(--signal);font-size:.7rem;width:22px}
+.cmdk-item.active,.cmdk-item:hover{background:var(--panel-2)}
+.cmdk-item.active{box-shadow:inset 3px 0 0 var(--signal)}
+
+/* ---------- assistant ---------- */
+.assist-btn{position:fixed;right:20px;bottom:20px;z-index:120;width:56px;height:56px;border-radius:14px;
+  background:var(--signal);color:#04110F;border:none;cursor:pointer;display:grid;place-items:center;
+  box-shadow:0 10px 30px rgba(56,225,214,.35);transition:transform .3s var(--ease)}
+.assist-btn:hover{transform:translateY(-3px)}
+.assist-btn svg{width:24px;height:24px}
+.assist{position:fixed;right:20px;bottom:88px;z-index:121;width:min(380px,92vw);height:min(540px,72vh);
+  background:var(--panel);border:1px solid var(--line-2);border-radius:10px;box-shadow:0 24px 70px rgba(0,0,0,.5);
+  display:none;flex-direction:column;overflow:hidden}
+.assist.open{display:flex}
+.assist-head{padding:15px 17px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.assist-head .t{font-family:var(--display);font-size:var(--s-1);font-weight:600}
+.assist-head .s{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--signal)}
+.assist-log{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:86%;padding:11px 14px;font-size:var(--s--1);line-height:1.55;border-radius:10px}
+.msg.bot{background:var(--panel-2);align-self:flex-start;border-bottom-left-radius:2px}
+.msg.me{background:var(--signal);color:#04110F;align-self:flex-end;border-bottom-right-radius:2px}
+.assist-sug{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 10px}
+.sug{font-family:var(--mono);font-size:.66rem;border:1px solid var(--line-2);background:transparent;color:var(--fg-soft);padding:6px 10px;cursor:pointer;border-radius:14px;transition:.25s}
+.sug:hover{border-color:var(--signal);color:var(--signal)}
+.assist-in{display:flex;border-top:1px solid var(--line)}
+.assist-in input{flex:1;border:none;background:transparent;color:var(--fg);font-family:var(--body);font-size:var(--s--1);padding:13px 15px}
+.assist-in input:focus{outline:none}
+.assist-in button{border:none;background:transparent;color:var(--signal);cursor:pointer;padding:0 15px;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase}
+
+/* ---------- responsive ---------- */
+@media(max-width:860px){
+  .about-grid,.book{grid-template-columns:1fr}
+  .job{grid-template-columns:1fr;gap:8px}
+  .job .meta{padding-top:0;display:flex;gap:16px;align-items:baseline;flex-wrap:wrap}
+  .nav-links{position:fixed;inset:66px 0 auto 0;background:var(--panel);flex-direction:column;
+    align-items:flex-start;gap:0;padding:0 var(--gut);border-bottom:1px solid var(--line);
+    max-height:0;overflow:hidden;transition:max-height .4s var(--ease)}
+  .nav-links.open{max-height:360px;padding-block:16px}
+  .nav-links a{padding:13px 0;width:100%;border-bottom:1px solid var(--line)}
+  .menu-toggle{display:grid}.kbd{display:none}
+}
+@media(max-width:480px){
+  :root{--hud:0px}
+  .rail,.progress{display:none}
+}
+</style>
+</head>
+<body>
+<a href="#hero" class="skip">Skip to content</a>
+
+<!-- boot / calibration -->
+<div id="boot" aria-hidden="true">
+  <div class="boot-grid">
+    <svg viewBox="0 0 260 120" preserveAspectRatio="none">
+      <g stroke="rgba(56,225,214,.25)" stroke-width="1">
+        <line x1="0" y1="30" x2="260" y2="30"/><line x1="0" y1="60" x2="260" y2="60"/><line x1="0" y1="90" x2="260" y2="90"/>
+        <line x1="65" y1="0" x2="65" y2="120"/><line x1="130" y1="0" x2="130" y2="120"/><line x1="195" y1="0" x2="195" y2="120"/>
+      </g>
+      <path d="M20 95 Q90 10 150 55 T240 30" fill="none" stroke="#FFB347" stroke-width="2"
+        stroke-dasharray="300" stroke-dashoffset="300"><animate attributeName="stroke-dashoffset" from="300" to="0" dur="1.4s" fill="freeze"/></path>
+      <circle r="4" fill="#38E1D6"><animateMotion dur="1.4s" fill="freeze" path="M20 95 Q90 10 150 55 T240 30"/></circle>
+    </svg>
+  </div>
+  <div class="boot-txt">calibrating&nbsp;<b>digital twin</b></div>
+  <div class="boot-pct" id="bootPct">0%</div>
+</div>
+
+<!-- HUD rail -->
+<div class="rail" aria-hidden="true">
+  <span class="stat">SYS&nbsp;<b>ONLINE</b></span>
+  <span class="node live"></span>
+  <span class="stat">FE&nbsp;<b>7Y+</b></span>
+</div>
+<div class="progress" aria-hidden="true"></div>
+
+<div class="wrap">
+<header id="top">
+  <div class="container nav">
+    <a href="#hero" class="brand">Rashid Khan <span class="chip">FE · Sr</span></a>
+    <nav class="nav-links" id="navlinks" aria-label="Primary">
+      <a href="#about"><span class="n">01</span>Profile</a>
+      <a href="#experience"><span class="n">02</span>Trajectory</a>
+      <a href="#skills"><span class="n">03</span>Systems</a>
+      <a href="#work"><span class="n">04</span>Payload</a>
+      <a href="#booking"><span class="n">05</span>Sync</a>
+      <a href="#contact"><span class="n">06</span>Link</a>
+    </nav>
+    <div class="nav-tools">
+      <button class="iconbtn" id="cmdkBtn" aria-label="Open command palette" title="Search (Ctrl/Cmd-K)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+      <button class="iconbtn" id="themeBtn" aria-label="Toggle light or dark mode">
+        <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <button class="iconbtn menu-toggle" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+<!-- HERO -->
+<section id="hero">
+  <div class="twin" id="twin" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <div class="hero-tel">
+      <span>HYD · UTC+5:30</span>
+      <span class="live">Available</span>
+      <span class="to">→ Relocating to Tokyo</span>
+      <span>JLPT N5 → N3</span>
+    </div>
+    <h1 class="title reveal">
+      <span class="sub">Senior Frontend Engineer</span>
+      I build the <em>real-time interfaces</em><br>that <u>run the machines</u>.
+    </h1>
+    <p class="tag reveal">7+ years shipping React &amp; TypeScript for high-performance enterprise UIs — CSS/SVG animation, micro-frontends, bundle optimization, and the code reviews that keep a team fast.</p>
+    <div class="cta reveal">
+      <a href="#booking" class="btn primary">Book a 1:1 →</a>
+      <a href="#work" class="btn">View payload</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="modlabel reveal"><span class="m">MODULE 01</span><span class="sep">//</span><span class="t">PROFILE</span><span class="ln"></span><span class="rt">◇ nominal</span></div>
+  <div class="about-grid">
+    <div class="reveal">
+      <p class="lead">I turn complex system state into interfaces people can <em>read at a glance and trust under load</em>.</p>
+      <p class="about-body">My work sits where dense real-time data meets a screen an operator has to act on. At ServiceNow and Oracle I've built accessible dashboards, drag-and-drop configuration UIs, and rich text tooling used by tens of thousands — leaning on React, TypeScript, and disciplined performance work (bundle size, render stability, browser APIs). I care about the unglamorous parts: reviews, reusable component libraries, and i18n done right. I'm relocating to Tokyo and studying toward JLPT N3 — and Mujin's real-time robot UI is exactly the kind of problem I want to work on next.</p>
+    </div>
+    <div class="readout reveal" role="group" aria-label="Profile readout">
+      <div class="rh"><span>OPERATOR</span><b>R.KHAN</b></div>
+      <dl>
+        <div class="row"><dt>Role</dt><dd>Sr. Frontend Engineer</dd></div>
+        <div class="row"><dt>Uptime</dt><dd class="hi">7+ yrs</dd></div>
+        <div class="row"><dt>Core</dt><dd>React · TS · CSS</dd></div>
+        <div class="row"><dt>Perf</dt><dd>Webpack · Jest</dd></div>
+        <div class="row"><dt>Base</dt><dd>Hyderabad, IN</dd></div>
+        <div class="row"><dt>Target</dt><dd class="mo">Tokyo, JP</dd></div>
+        <div class="row"><dt>Lang</dt><dd>EN · JP N5→N3</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="modlabel reveal"><span class="m">MODULE 02</span><span class="sep">//</span><span class="t">TRAJECTORY</span><span class="ln"></span><span class="rt">4 nodes</span></div>
+  <div class="timeline">
+
+    <article class="job reveal">
+      <div class="meta">
+        <div class="when"><span class="cur">Apr 2025 — Present</span></div>
+        <div class="co">ServiceNow</div>
+      </div>
+      <div>
+        <h3>Senior Software Engineer · Frontend</h3>
+        <div class="loc">Hyderabad, India</div>
+        <ul>
+          <li><b>Frontend workflow architecture.</b> Built responsive, accessible dashboards for enterprise apps, turning complex task configuration into intuitive drag-and-drop React + TypeScript components.</li>
+          <li><b>Delivery optimization.</b> Scaled client-side orchestration views for recommendation modules, using browser APIs and bundle-size reduction to cut visual response lag and improve layout stability.</li>
+          <li><b>Reviews &amp; mentorship.</b> Kept code health high through rigorous Git reviews, shared architecture blueprints, and pair programming with junior engineers.</li>
+          <li><b>Internationalization.</b> Ran layout localization frameworks across front-facing apps for uniform, context-aware experiences.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="job reveal">
+      <div class="meta">
+        <div class="when">Jan 2024 — Apr 2025</div>
+        <div class="co">Oracle</div>
+      </div>
+      <div>
+        <h3>Senior Software Engineer · IC3</h3>
+        <div class="loc">Hyderabad, India</div>
+        <ul>
+          <li><b>Core text library.</b> Led development and styling for Oracle Redwood's rich text library (IRT2) — pixel-perfect, accessible layouts reaching <span class="metric">50,000+</span> enterprise users.</li>
+          <li><b>Web performance.</b> Built a Spectra-based editor interface: <span class="metric">+15%</span> client-side data efficiency and <span class="metric">−40%</span> localization processing time via bundling and state optimization.</li>
+          <li><b>Accessibility &amp; integrity.</b> Held strict WCAG compliance across the catalog and engineered sandboxed local runtimes to isolate formatting issues before release.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="job reveal">
+      <div class="meta">
+        <div class="when">Jun 2022 — Jan 2024</div>
+        <div class="co">EXL Service</div>
+      </div>
+      <div>
+        <h3>Senior Software Engineer</h3>
+        <div class="loc">Hyderabad, India</div>
+        <ul>
+          <li><b>Data-viz SPA.</b> Enhanced client-facing components for "EXL Vantage," used by <span class="metric">1,000+</span> professionals at <span class="metric">99.9%</span> uptime.</li>
+          <li><b>Micro-frontends.</b> Connected independent client apps via Webpack Module Federation with configurable layouts and access layers for fluid navigation.</li>
+          <li><b>Rendering optimization.</b> Refactored API polling on data-heavy charting feeds for an immediate <span class="metric">+20%</span> frontend performance boost.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="job reveal">
+      <div class="meta">
+        <div class="when">Dec 2018 — Jun 2022</div>
+        <div class="co">Tata Consultancy Services</div>
+      </div>
+      <div>
+        <h3>Software &amp; Automation Engineer</h3>
+        <div class="loc">Hyderabad, India</div>
+        <ul>
+          <li><b>Web portal engineering.</b> Designed internal asset portals in core JavaScript/HTML/CSS, letting operations teams log system metrics and pull automated spreadsheet outputs.</li>
+        </ul>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="modlabel reveal"><span class="m">MODULE 03</span><span class="sep">//</span><span class="t">SYSTEMS</span><span class="ln"></span><span class="rt">◇ cyan = role-critical</span></div>
+  <div class="skills">
+    <div class="skill reveal">
+      <div class="sh"><span>Frontend</span><b>CORE</b></div>
+      <h3>Interface &amp; Motion</h3>
+      <div class="tags">
+        <span class="tag req">JavaScript ES6+</span><span class="tag req">TypeScript</span><span class="tag req">React</span>
+        <span class="tag req">CSS3</span><span class="tag">HTML5</span><span class="tag req">SVG</span>
+        <span class="tag req">Visual Effects</span><span class="tag req">Animations</span>
+      </div>
+    </div>
+    <div class="skill reveal">
+      <div class="sh"><span>Architecture</span><b>SCALE</b></div>
+      <h3>Structure &amp; Perf</h3>
+      <div class="tags">
+        <span class="tag">Micro-frontends</span><span class="tag">Module Federation</span><span class="tag">SPA</span>
+        <span class="tag req">Web Perf Optimization</span><span class="tag req">Bundle Reduction</span><span class="tag req">i18n</span>
+      </div>
+    </div>
+    <div class="skill reveal">
+      <div class="sh"><span>Build &amp; Test</span><b>PIPE</b></div>
+      <h3>Tooling &amp; CI</h3>
+      <div class="tags">
+        <span class="tag req">Webpack</span><span class="tag">Rollup</span><span class="tag req">Jest</span>
+        <span class="tag req">Testing Library</span><span class="tag req">ESLint</span><span class="tag req">SonarQube</span><span class="tag req">CI/CD</span>
+      </div>
+    </div>
+    <div class="skill reveal">
+      <div class="sh"><span>Practice</span><b>TEAM</b></div>
+      <h3>Craft &amp; Review</h3>
+      <div class="tags">
+        <span class="tag req">WCAG A11y</span><span class="tag">Git</span><span class="tag">Agile</span>
+        <span class="tag">TDD</span><span class="tag req">Peer Reviews</span><span class="tag req">Mentorship</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work">
+  <div class="modlabel reveal"><span class="m">MODULE 04</span><span class="sep">//</span><span class="t">PAYLOAD</span><span class="ln"></span><span class="rt">enterprise · NDA</span></div>
+  <p class="note reveal">// Enterprise work under NDA — deep-dive available on request. Public demo links are placeholders, ready to wire up.</p>
+  <div class="cards">
+    <article class="card reveal">
+      <span class="cn">ServiceNow · Platform UI</span>
+      <h3>Config Dashboards &amp; Orchestration Views</h3>
+      <p>Responsive, accessible drag-and-drop configuration UI plus client-side orchestration views tuned for render stability and reduced bundle size.</p>
+      <div class="tags"><span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">A11y</span><span class="tag">Perf</span></div>
+      <div class="links"><a href="#" aria-disabled="true">Case study →</a></div>
+    </article>
+    <article class="card reveal">
+      <span class="cn">Oracle Redwood · IRT2</span>
+      <h3>Rich Text Library &amp; Spectra Editor</h3>
+      <p>Pixel-perfect, WCAG-compliant text components at 50k+ users, with a Spectra-based editor: +15% data efficiency, −40% localization time.</p>
+      <div class="tags"><span class="tag">CSS</span><span class="tag">SVG</span><span class="tag">i18n</span><span class="tag">Bundling</span></div>
+      <div class="links"><a href="#" aria-disabled="true">Details →</a></div>
+    </article>
+    <article class="card reveal">
+      <span class="cn">EXL · Vantage SPA</span>
+      <h3>Data-Viz Micro-Frontends</h3>
+      <p>Client components for a charting-heavy SPA at 99.9% uptime, joined via Webpack Module Federation, with API-polling refactors for +20% perf.</p>
+      <div class="tags"><span class="tag">Module Fed.</span><span class="tag">Charts</span><span class="tag">React</span></div>
+      <div class="links"><a href="#" aria-disabled="true">Details →</a></div>
+    </article>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking">
+  <div class="modlabel reveal"><span class="m">MODULE 05</span><span class="sep">//</span><span class="t">SYNC</span><span class="ln"></span><span class="rt">30 min</span></div>
+  <div class="book">
+    <div class="reveal">
+      <p class="lead2">Let's talk real-time UI, performance, or a role in Tokyo.</p>
+      <p>Tell me what to cover and I'll prep a focused 30 minutes. This composes an email — no account, no tracking. If a scheduler is configured, a booking button appears here automatically.</p>
+      <div id="schedWrap"></div>
+    </div>
+    <div class="reveal">
+      <div class="field"><label for="bk-name">Your name</label><input id="bk-name" type="text" autocomplete="name" /></div>
+      <div class="field"><label for="bk-topic">Topic</label>
+        <select id="bk-topic">
+          <option>Real-time / robot UI &amp; performance</option>
+          <option>A role in Tokyo</option>
+          <option>React / TypeScript architecture</option>
+          <option>Something else</option>
+        </select>
+      </div>
+      <div class="field"><label for="bk-msg">What should we cover?</label><textarea id="bk-msg" placeholder="A line or two of context helps."></textarea></div>
+      <button class="btn primary" id="bk-send" type="button">Compose request →</button>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="modlabel reveal"><span class="m">MODULE 06</span><span class="sep">//</span><span class="t">LINK</span><span class="ln"></span><span class="rt">◇ open channel</span></div>
+  <p class="big reveal">Let's build interfaces that <a href="mailto:khanrashid11a@gmail.com">move machines</a>.</p>
+  <div class="contact-row reveal">
+    <a href="mailto:khanrashid11a@gmail.com">✉ khanrashid11a@gmail.com</a>
+    <a href="tel:+917077102579">☎ +91 70771 02579</a>
+    <a href="https://www.linkedin.com/in/iamrashidpathan" target="_blank" rel="noopener">LinkedIn ↗</a>
+    <a href="https://github.com/iamrashidpathan" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container foot">
+    <span>© <span id="yr"></span> Rashid Reyaz Khan</span>
+    <span>SYS · digital twin nominal</span>
+    <span>HYD → TOKYO</span>
+  </div>
+</footer>
+</div><!-- /.wrap -->
+
+<!-- command palette -->
+<div class="cmdk" id="cmdk" role="dialog" aria-modal="true" aria-label="Command palette">
+  <div class="cmdk-box">
+    <input id="cmdkInput" type="text" placeholder="Jump to a module…" aria-label="Search sections" autocomplete="off" />
+    <div class="cmdk-list" id="cmdkList" role="listbox"></div>
+  </div>
+</div>
+
+<!-- assistant -->
+<button class="assist-btn" id="assistBtn" aria-label="Ask the assistant about Rashid">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+</button>
+<div class="assist" id="assist" role="dialog" aria-label="Assistant about Rashid">
+  <div class="assist-head">
+    <div><div class="t">Console · Ask</div><div class="s">Client-side · about Rashid</div></div>
+    <button class="iconbtn" id="assistClose" aria-label="Close assistant" style="width:32px;height:32px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="assist-log" id="assistLog" aria-live="polite"></div>
+  <div class="assist-sug" id="assistSug"></div>
+  <div class="assist-in">
+    <input id="assistInput" type="text" placeholder="Ask about React work, perf, Tokyo…" aria-label="Ask a question" />
+    <button id="assistSend">Send</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+  /* ---------- CONFIG ---------- */
+  var CALENDLY_URL = ""; // set to your scheduler link to show an "Open scheduler" button; empty = email-only
+  var EMAIL = "khanrashid11a@gmail.com";
+
+  /* ---------- boot ---------- */
+  var bootPct = document.getElementById("bootPct");
+  window.addEventListener("load", function(){
+    var total = reduce ? 200 : 1600, start = performance.now();
+    function tick(now){
+      var p = Math.min(1,(now-start)/total);
+      if(bootPct) bootPct.textContent = Math.round(p*100)+"%";
+      if(p<1){ requestAnimationFrame(tick); }
+      else { document.getElementById("boot").classList.add("done"); }
+    }
+    requestAnimationFrame(tick);
+  });
+
+  document.getElementById("yr").textContent = new Date().getFullYear();
+
+  /* ---------- theme (in-memory) ---------- */
+  var theme = "dark"; // console defaults dark
+  var icon = document.getElementById("themeIcon");
+  function applyTheme(){
+    document.documentElement.setAttribute("data-theme", theme);
+    icon.innerHTML = theme==="light"
+      ? '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'
+      : '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>';
+  }
+  applyTheme();
+  document.getElementById("themeBtn").addEventListener("click", function(){ theme = theme==="dark"?"light":"dark"; applyTheme(); });
+
+  /* ---------- header + progress ---------- */
+  var header = document.getElementById("top");
+  var progress = document.querySelector(".progress");
+  function onScroll(){
+    header.classList.toggle("scrolled", window.scrollY>10);
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h>0 ? (window.scrollY/h)*100 : 0;
+    if(progress) progress.style.setProperty("--p", p+"%");
+  }
+  window.addEventListener("scroll", onScroll, {passive:true}); onScroll();
+
+  /* ---------- mobile menu ---------- */
+  var menuBtn = document.getElementById("menuBtn");
+  var navlinks = document.getElementById("navlinks");
+  menuBtn.addEventListener("click", function(){
+    var open = navlinks.classList.toggle("open");
+    menuBtn.setAttribute("aria-expanded", open?"true":"false");
+  });
+  navlinks.addEventListener("click", function(e){
+    if(e.target.closest("a")){ navlinks.classList.remove("open"); menuBtn.setAttribute("aria-expanded","false"); }
+  });
+
+  /* ---------- reveal ---------- */
+  if("IntersectionObserver" in window && !reduce){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }});
+    }, {threshold:.12, rootMargin:"0px 0px -8% 0px"});
+    document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
+  } else { document.querySelectorAll(".reveal").forEach(function(el){ el.classList.add("in"); }); }
+
+  /* ---------- hero digital twin (canvas) ---------- */
+  (function twin(){
+    var host = document.getElementById("twin");
+    if(!host || reduce) return;
+    var canvas, ctx, raf=0, running=true, W=0, H=0, dpr=Math.min(window.devicePixelRatio||1,2), t=0;
+    try{
+      canvas = document.createElement("canvas");
+      ctx = canvas.getContext("2d");
+      if(!ctx) throw new Error("no 2d");
+      host.appendChild(canvas);
+    }catch(e){ host.style.display="none"; return; }
+
+    function resize(){
+      W = host.clientWidth; H = host.clientHeight;
+      canvas.width = W*dpr; canvas.height = H*dpr;
+      canvas.style.width=W+"px"; canvas.style.height=H+"px";
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+    resize();
+    window.addEventListener("resize", resize);
+
+    // isometric-ish grid points + a moving pick node tracing a bezier
+    function iso(x,y){ return {x: (x-y)*0.5, y:(x+y)*0.28}; }
+    function draw(){
+      if(!running){ return; }
+      t += 0.008;
+      ctx.clearRect(0,0,W,H);
+      var cx = W*0.72, cy = H*0.52, sc = Math.min(W,H)*0.052;
+      // grid
+      ctx.lineWidth = 1;
+      for(var gx=-6; gx<=6; gx++){
+        for(var gy=-6; gy<=6; gy++){
+          var a=iso(gx,gy), b=iso(gx+1,gy);
+          ctx.strokeStyle="rgba(56,225,214,"+(0.05+0.04*Math.sin(t+gx*0.3+gy*0.3))+")";
+          ctx.beginPath();
+          ctx.moveTo(cx+a.x*sc, cy+a.y*sc);
+          ctx.lineTo(cx+b.x*sc, cy+b.y*sc);
+          var c=iso(gx,gy+1);
+          ctx.lineTo(cx+c.x*sc, cy+c.y*sc);
+          ctx.stroke();
+        }
+      }
+      // pick-and-place arc (bezier), oscillating
+      var phase=(Math.sin(t*0.9)+1)/2;
+      var p0=iso(-4,3), p3=iso(4,-3);
+      var x0=cx+p0.x*sc, y0=cy+p0.y*sc, x3=cx+p3.x*sc, y3=cy+p3.y*sc;
+      var cxA=(x0+x3)/2, cyA=Math.min(y0,y3)-90;
+      // path
+      ctx.strokeStyle="rgba(255,179,71,0.35)"; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(x0,y0); ctx.quadraticCurveTo(cxA,cyA,x3,y3); ctx.stroke();
+      // moving node along quadratic
+      var u=phase, inv=1-u;
+      var px=inv*inv*x0 + 2*inv*u*cxA + u*u*x3;
+      var py=inv*inv*y0 + 2*inv*u*cyA + u*u*y3;
+      var grd=ctx.createRadialGradient(px,py,0,px,py,14);
+      grd.addColorStop(0,"rgba(56,225,214,0.9)"); grd.addColorStop(1,"rgba(56,225,214,0)");
+      ctx.fillStyle=grd; ctx.beginPath(); ctx.arc(px,py,14,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle="#38E1D6"; ctx.beginPath(); ctx.arc(px,py,3.2,0,Math.PI*2); ctx.fill();
+      // endpoints
+      ctx.fillStyle="rgba(255,179,71,0.9)";
+      ctx.beginPath(); ctx.arc(x0,y0,3,0,Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x3,y3,3,0,Math.PI*2); ctx.fill();
+      raf=requestAnimationFrame(draw);
+    }
+    raf=requestAnimationFrame(draw);
+    document.addEventListener("visibilitychange", function(){
+      running = !document.hidden;
+      if(running){ raf=requestAnimationFrame(draw); } else { cancelAnimationFrame(raf); }
+    });
+  })();
+
+  /* ---------- booking ---------- */
+  var schedWrap = document.getElementById("schedWrap");
+  if(CALENDLY_URL){
+    var a=document.createElement("a");
+    a.href=CALENDLY_URL; a.target="_blank"; a.rel="noopener"; a.className="btn"; a.textContent="Open scheduler ↗"; a.style.marginTop="8px";
+    schedWrap.appendChild(a);
+  }
+  document.getElementById("bk-send").addEventListener("click", function(){
+    var name=(document.getElementById("bk-name").value||"").trim();
+    var topic=document.getElementById("bk-topic").value;
+    var msg=(document.getElementById("bk-msg").value||"").trim();
+    var subject="1:1 request"+(topic?" · "+topic:"");
+    var body="Hi Rashid,\n\n"+(name?"I'm "+name+".\n\n":"")+
+      "I'd like to book a 30-minute 1:1 about: "+topic+".\n\n"+
+      (msg?"Context:\n"+msg+"\n\n":"")+
+      "A few times that work for me:\n- \n- \n\nThanks!";
+    window.location.href="mailto:"+EMAIL+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);
+  });
+
+  /* ---------- command palette ---------- */
+  var cmdk=document.getElementById("cmdk"), cmdkInput=document.getElementById("cmdkInput"), cmdkList=document.getElementById("cmdkList");
+  var items=[
+    {label:"Profile", icon:"01", go:"#about"},
+    {label:"Trajectory (experience)", icon:"02", go:"#experience"},
+    {label:"Systems (skills)", icon:"03", go:"#skills"},
+    {label:"Payload (work)", icon:"04", go:"#work"},
+    {label:"Sync (book a 1:1)", icon:"05", go:"#booking"},
+    {label:"Link (contact)", icon:"06", go:"#contact"},
+    {label:"Email Rashid", icon:"✉", act:function(){ window.location.href="mailto:"+EMAIL; }},
+    {label:"LinkedIn", icon:"↗", act:function(){ window.open("https://www.linkedin.com/in/iamrashidpathan","_blank","noopener"); }},
+    {label:"GitHub", icon:"↗", act:function(){ window.open("https://github.com/iamrashidpathan","_blank","noopener"); }},
+    {label:"Toggle theme", icon:"◐", act:function(){ theme=theme==="dark"?"light":"dark"; applyTheme(); }}
+  ];
+  var active=0;
+  function renderCmdk(q){
+    q=(q||"").toLowerCase();
+    var f=items.filter(function(it){ return it.label.toLowerCase().indexOf(q)>-1; });
+    if(active>=f.length) active=0;
+    cmdkList.innerHTML="";
+    f.forEach(function(it,i){
+      var d=document.createElement("div");
+      d.className="cmdk-item"+(i===active?" active":""); d.setAttribute("role","option");
+      d.innerHTML='<span class="ci">'+it.icon+'</span>'+it.label;
+      d.addEventListener("click", function(){ runItem(it); });
+      cmdkList.appendChild(d);
+    });
+    cmdkList._f=f;
+  }
+  function runItem(it){ closeCmdk(); if(it.go){ document.querySelector(it.go).scrollIntoView({behavior:reduce?"auto":"smooth"}); } else if(it.act){ it.act(); } }
+  function openCmdk(){ cmdk.classList.add("open"); cmdkInput.value=""; active=0; renderCmdk(""); setTimeout(function(){cmdkInput.focus();},30); }
+  function closeCmdk(){ cmdk.classList.remove("open"); }
+  document.getElementById("cmdkBtn").addEventListener("click", openCmdk);
+  cmdkInput.addEventListener("input", function(){ renderCmdk(cmdkInput.value); });
+  cmdkInput.addEventListener("keydown", function(e){
+    var f=cmdkList._f||[];
+    if(e.key==="ArrowDown"){ e.preventDefault(); active=Math.min(active+1,f.length-1); renderCmdk(cmdkInput.value); }
+    else if(e.key==="ArrowUp"){ e.preventDefault(); active=Math.max(active-1,0); renderCmdk(cmdkInput.value); }
+    else if(e.key==="Enter"){ e.preventDefault(); if(f[active]) runItem(f[active]); }
+  });
+  document.addEventListener("keydown", function(e){
+    if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){ e.preventDefault(); cmdk.classList.contains("open")?closeCmdk():openCmdk(); }
+    if(e.key==="Escape"){ closeCmdk(); closeAssist(); }
+  });
+  cmdk.addEventListener("click", function(e){ if(e.target===cmdk) closeCmdk(); });
+
+  /* ---------- assistant (100% client-side KB) ----------
+     UPGRADE PATH → real LLM: replace answer() with a fetch() to YOUR serverless
+     proxy (e.g. /api/chat on Vercel/Netlify) holding the API key server-side.
+     Never put a key in this file. */
+  var KB=[
+    {k:["who","about","summary","rashid","background"],a:"Rashid Reyaz Khan is a Senior Frontend Engineer with 7+ years building high-performance enterprise UIs in React and TypeScript. He's relocating to Tokyo."},
+    {k:["servicenow","current","now","job","present"],a:"At ServiceNow (Apr 2025–present) he builds responsive, accessible React/TypeScript dashboards, drag-and-drop config UIs, and orchestration views tuned for render stability and small bundles — plus code reviews and mentorship."},
+    {k:["oracle","redwood","irt2","spectra","text"],a:"At Oracle (2024–2025) he led Redwood's IRT2 rich text library — pixel-perfect, WCAG-compliant components at 50k+ users — and built a Spectra editor: +15% data efficiency, −40% localization time."},
+    {k:["exl","vantage","charts","spa","healthcare"],a:"At EXL he worked on EXL Vantage, a charting-heavy SPA at 99.9% uptime, joined micro-frontends via Webpack Module Federation, and cut API-polling overhead for +20% frontend perf."},
+    {k:["tcs","tata","portal","early"],a:"At TCS (2018–2022) he built internal asset web portals in core JavaScript/HTML/CSS for operations teams."},
+    {k:["react","typescript","css","svg","animation","animations","motion","effects"],a:"Core frontend: JavaScript ES6+, TypeScript, React, CSS3, and SVG — including visual effects and animations (the hero on this page is his own animated SVG/canvas digital twin)."},
+    {k:["performance","perf","optimize","bundle","webpack","rollup","speed"],a:"Performance is a focus: bundle-size reduction, render stability, browser APIs, and bundler config with Webpack/Rollup. Documented wins include −40% localization time and +20% frontend perf."},
+    {k:["test","testing","jest","ci","cd","quality","eslint","sonar"],a:"Testing & quality: Jest, Testing Library, ESLint, SonarQube, and CI/CD pipelines."},
+    {k:["micro","federation","architecture","spa"],a:"He's shipped micro-frontends via Webpack Module Federation and single-page apps with configurable, access-aware layouts."},
+    {k:["mujin","robot","robotics","controller","real-time","real time"],a:"Rashid is applying to Mujin's Senior Frontend Engineer role — real-time robot-controller UI is exactly his interest: dense live state, React/TS, and CSS/SVG animation for operator interfaces."},
+    {k:["japan","tokyo","relocate","move","visa"],a:"He's relocating to Tokyo and open to visa sponsorship. He's studying Japanese, moving from JLPT N5 toward N3."},
+    {k:["japanese","jlpt","language","n5","n3"],a:"Japanese: JLPT N5 baseline, actively working toward N3. English is business-level."},
+    {k:["a11y","accessible","accessibility","wcag"],a:"Accessibility is baked in — sustained strict WCAG compliance across Oracle's component catalog and accessible dashboards at ServiceNow."},
+    {k:["i18n","localization","localize","international"],a:"He's run i18n/localization frameworks across front-facing apps for uniform, context-aware experiences globally."},
+    {k:["education","iit","degree","study","kgp","kiit"],a:"He's pursuing an Executive PG Certificate in Generative & Agentic AI at IIT Kharagpur, and holds a B.Tech from KIIT (2014–2018)."},
+    {k:["award","achievement","llama","mentor","recognition"],a:"Recognition: the ServiceNow Llama Award for workflow templates and web interfaces. He's also mentored 100+ student programmers at Coding Ninjas."},
+    {k:["contact","email","reach","hire","linkedin","github"],a:"Reach him at khanrashid11a@gmail.com, LinkedIn (iamrashidpathan), or GitHub (iamrashidpathan) — or use the Sync section to book a 1:1."},
+    {k:["experience","years","how long","senior"],a:"7+ years across ServiceNow, Oracle, EXL Service, and TCS."}
+  ];
+  function answer(q){
+    q=q.toLowerCase(); var best=null, score=0;
+    KB.forEach(function(e){ var s=0; e.k.forEach(function(w){ if(q.indexOf(w)>-1) s++; }); if(s>score){ score=s; best=e; } });
+    if(best&&score>0) return best.a;
+    return "I can answer questions about Rashid's frontend work, performance, testing, accessibility, the Mujin fit, or his move to Tokyo. Try a suggestion below.";
+  }
+  var assist=document.getElementById("assist"), log=document.getElementById("assistLog"), sug=document.getElementById("assistSug");
+  var suggestions=["Is he a fit for Mujin?","What's his React/perf work?","Tell me about the Tokyo move","How do I contact him?"];
+  function addMsg(text,who){ var d=document.createElement("div"); d.className="msg "+(who||"bot"); d.textContent=text; log.appendChild(d); log.scrollTop=log.scrollHeight; }
+  function renderSug(){ sug.innerHTML=""; suggestions.forEach(function(s){ var b=document.createElement("button"); b.className="sug"; b.textContent=s; b.addEventListener("click", function(){ ask(s); }); sug.appendChild(b); }); }
+  function ask(q){ addMsg(q,"me"); setTimeout(function(){ addMsg(answer(q),"bot"); }, reduce?0:240); }
+  var assistInput=document.getElementById("assistInput");
+  document.getElementById("assistSend").addEventListener("click", function(){ var v=assistInput.value.trim(); if(!v) return; assistInput.value=""; ask(v); });
+  assistInput.addEventListener("keydown", function(e){ if(e.key==="Enter"){ var v=assistInput.value.trim(); if(v){ assistInput.value=""; ask(v); } }});
+  var opened=false;
+  function openAssist(){ assist.classList.add("open"); if(!opened){ opened=true; addMsg("Hi — I'm Rashid's site console. Ask about his frontend work, performance, or his move to Tokyo.","bot"); renderSug(); } setTimeout(function(){ assistInput.focus(); },60); }
+  function closeAssist(){ assist.classList.remove("open"); }
+  document.getElementById("assistBtn").addEventListener("click", function(){ assist.classList.contains("open")?closeAssist():openAssist(); });
+  document.getElementById("assistClose").addEventListener("click", closeAssist);
+
+})();
+</script>
+</body>
+</html>
